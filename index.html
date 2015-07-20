@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+
+<head>
+    <title>CC API Test Page</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- Bootstrap CSS CDN -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
+    <!-- Custom local CSS -->
+    <link rel="stylesheet" href="css/custom.css">
+</head>
+
+<body>
+    <!-- APP CONTENT -->
+
+    <div class="container">
+        <div class="row">
+            <div class="page-header">
+                <h1 class="text-primary text-center">
+                    This is a test page for Constant Contact API<br>
+                    <small class="text-warning">Warning: using this will modify the actual live contact lists at constantcontact.com</small>
+                </h1>
+                <div class="panel panel-info">
+                    <div class="panel-heading">
+                        <h3 class="panel-title">Disclaimer</h3>
+                    </div>
+                    <div class="panel-body">
+                        This page is for internal api testing only. It is not meant for production. Parts of the code of this page and related files may be used in production code.
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="row">
+            <form class="col-sm-6 col-sm-offset-3" target="addiframe" action="php/createcontact.php" method="post">
+                <legend class="text-primary text-center">Add contacts to the bellissimakids mailing list</legend>
+                <div class="form-group">
+                    <label for="#addfirstname" class="text-muted">First Name</label>
+                    <input required type="text" id="addfirstname" name="first_name" class="form-control" placeholder="Jane">
+                </div>
+                <div class="form-group">
+                    <label for="#addemail" class="text-muted">Email Address</label>
+                    <input required type="email" id="addemail" name="email" class="form-control" placeholder="jane-doe@example.com">
+                </div>
+                <input type="hidden" name="list_id" value="1152157100">
+                <button type="submit" id="addbtn" class="btn btn-primary">Add contact</button>
+            </form>
+            <div class="modal fade" id="addmodal">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span></button>
+                            <h4 class="modal-title"></h4>
+                        </div>
+                        <div class="modal-body">Processing...</div>
+                        <div class="modal-footer">
+
+                            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="row row-margin">
+            <form class="col-sm-6 col-sm-offset-3" target="addiframe" action="php/unsubcontact.php" method="post">
+                <legend class="text-primary text-center">Unsubscribe contact from specific mailing lists</legend>
+                <div class="panel panel-danger">
+                    <div class="panel-heading">
+                        <h3 class="panel-title">Important Reminder</h3>
+                    </div>
+                    <div class="panel-body">
+                        This action will only change the lists a contact is subscribed to. 
+                        It will not remove a contact entirely. The contact will 
+                        still be counted as one of the owner's contacts. A different 
+                        method must be used for a complete opt-out.
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="#unsubemail" class="text-muted">Email Address</label>
+                    <input required type="email" id="addemail" name="email" class="form-control" placeholder="jane-doe@example.com">
+                </div>
+                <button type="submit" id="unsubbtn" class="btn btn-primary">Unsubscribe...</button>
+            </form>
+            <div class="modal fade" id="unsubmodal">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span></button>
+                            <h4 class="modal-title"></h4>
+                        </div>
+                        <div class="modal-body">Processing...</div>
+                        <div class="modal-footer">
+                            <button id="proceedbtn" type="subi" class="btn btn-default">Proceed</button>
+                            <button id="cancelbtn" type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="row-margin">
+                            <div class="panel panel-default">
+                    <div class="panel-body">
+                        <p>&copy; Victoria Kariolic, Michael Semko 2015</p>
+                    </div>
+                </div>
+            
+        </div>
+        
+    </div>
+
+    <iframe frameborder="0" name="addiframe" id="addiframe"></iframe>
+
+    <!-- jQuery CDN -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
+    <!-- jQuery local fallback -->
+    <script>
+        window.jQuery || document.write('<script src="js/jquery-2.1.4.min.js"><\/script>')
+
+    </script>
+
+
+
+    <!-- Bootstrap JS local fallback -->
+    <script>
+        if (typeof($.fn.modal) === 'undefined') {
+            document.write('<script src="js/bootstrap.min.js"><\/script>')
+        }
+
+    </script>
+    <!-- Bootstrap CSS local fallback -->
+    <script>
+        $(document).ready(function() {
+            var bodyColor = $('body').css('color');
+            if (bodyColor != 'rgb(51, 51, 51)') {
+                $("head").prepend('<link rel="stylesheet" href="css/bootstrap.min.css">');
+            }
+        });
+
+    </script>
+    <script src="js/custom.js"></script>
+</body>
