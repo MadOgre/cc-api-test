@@ -13,11 +13,11 @@
 			echo $lists[$value["id"]] . '<br>';
 			$checkboxes .= '<form id=\"listselect\" action=\"php/unsubsubmit.php\" ' .
              			'target=\"addiframe\" method=\"post\"><div class=\"checkbox\">' .
-						'<label><input type=checkbox checked name=' .
+						'<label><input type=checkbox name=' .
 						$value["id"] . ' value=' . $value["id"] . '>' .
 						$lists[$value["id"]] . '</label></div></form>';
 		}
-		$modalHTML = 'Please uncheck the lists you wish to be removed from and click \"Proceed\"<br><br>';
+		$modalHTML = 'Please check the lists you wish to be removed from and click \"Proceed\"<br><br>';
 		$modalHTML .= $checkboxes;
 		outputToModal("unsubmodal", "Unsubscribe...", $modalHTML, true);
 		var_dump($contact);
