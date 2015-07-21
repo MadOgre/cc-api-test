@@ -9,11 +9,6 @@
 		//the last parameter indicates POST request (means the $params will be ignored)
 		$postUrl = buildUrl(contacts_base_url, $params, true);
 		
-		//printing things out into the invisible iframe on the page
-		//may be made visible if necessary
-		var_dump($params); //FOR DEBUG ONLY
-		echo $postUrl; //FOR DEBUG ONLY
-		
 		//If getContact already exist in the specified list
 		 if ($contact = getContact($params["email"])) {
 			 $exists = false;
@@ -27,7 +22,6 @@
 				outputToModal("addmodal", "Epic Fail!", "This contact already exists in this list");
 				exit;
 			 } else {
-				 //UPDATE CODE GOES HERE!
 				 $result = addContactToList($contact, $params["list_id"]);
 				 if ($result == 200) {
 					outputToModal("addmodal", "Success!", "You have successfully added a contact");

@@ -187,7 +187,5 @@
 		$contact["lists"][] = array("id" => $listId);
 		$putUrl = buildUrl(contacts_base_url . '/' . $contact["id"]);
 		$response = httpRequest($putUrl, "PUT", getHeaders(), json_encode($contact));
-		echo '\n' . $response["info"]["http_code"];
-		var_dump($contact);
 		return $response["info"]["http_code"];
 	}
