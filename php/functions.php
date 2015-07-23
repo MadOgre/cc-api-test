@@ -28,14 +28,14 @@
     //this function takes a url (<http://someaddress.com>)
 	//and attaches parameters to it in the form http://someaddress.com?parm1=value1&parm2=value2
 	//the API key is also added as the first parameter regardless
-	function buildUrl($url, array $queryParams = null, $isPostOrPutRequest = false)
+	function buildUrl($url, $isGetRequest = false, array $queryParams = null)
     {
 		//api key is placed in a one element array by itself
 		//!! This is where the API KEY will need to be changed if necessary !!
         $keyArr = array('api_key' => api_key);
 		
 	    //if the request is post (not get) 
-		if ($isPostOrPutRequest) {
+		if (!$isGetRequest) {
 			//attach this parameter to indicate that the user added himself as opposed to the list owner
 			$keyArr['action_by'] = "ACTION_BY_VISITOR";
 		} else {
@@ -55,7 +55,9 @@
 		//builds the url (refer to buildUrl function) usung only the url as a single query parameter
 		//parameter must be passed as an array of 1 element
 		//contacts_base_url is a constant defined in config.php
-		$getUrl = buildUrl(contacts_base_url, array("email" => $email));
+		$getUrl = buildUrl(contacts_base_url, true, array("email" => $email));
+		
+		echo 'getContact($email): $getUrl: <br>' . $getUrl . '<br>';
 
 		//send the actual request and receive the response (refer to httpRequest function)
 		$response = httpRequest($getUrl, "GET", getHeaders());
@@ -67,6 +69,7 @@
 		//if the body's result array is empty return null, otherwise return the first result
 		//this returns only the contact object
 		if (!empty($body["results"])) {
+			var_dump($body["results"][0]);
 			return $body["results"][0];
 		} else {
 			return null;
@@ -92,7 +95,9 @@
 	function getAllContactLists() {
 		
 		//build a url
-		$getUrl = buildUrl(lists_base_url);
+		$getUrl = buildUrl(lists_base_url, true);
+		
+		echo 'getAllContactlists(): $getUrl: <br>' . $getUrl  . '<br>';
 		
 		//send a request, save the result in responce
 		$response = httpRequest($getUrl, "GET", getHeaders());

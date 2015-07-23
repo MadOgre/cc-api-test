@@ -4,7 +4,9 @@
 
 	//build a url using buildUrl function from functions.php
 	//the last parameter indicates POST request (means the $params will be ignored)
-	$postUrl = buildUrl(contacts_base_url, $_POST, true);
+	$postUrl = buildUrl(contacts_base_url);
+	
+	echo 'createcontact.php: $postUrl: <br>' . $postUrl  . '<br>';
 	
 	//If getContact already exist in the specified list
 	 if ($contact = getContact($_POST["email"])) {
