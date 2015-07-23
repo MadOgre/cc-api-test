@@ -1,36 +1,57 @@
 <?php
+
+/**
+ *  @file		createcontact.php
+ *  @brief		This script is used to subscribe a visitor to a mailing list
+ *  @author		Victoria Kariolic
+ *  @author		Michael Semko
+ *  @package	cc-api-test
+ *  
+ *  @details	This script receives a "first_name", "email", and "list_id" 
+ *  			via POST from the web form and adds the visitor to the mailing list
+ *  			if possible. Modal window is used for output.
+ */
 	require_once("config.php");
 	require_once("functions.php"); 
 
-	//build a url using buildUrl function from functions.php
-	//the last parameter indicates POST request (means the $params will be ignored)
+	//build a URL using buildUrl function from functions.php
 	$postUrl = buildUrl(contacts_base_url);
 	
-	echo 'createcontact.php: $postUrl: <br>' . $postUrl  . '<br>';
-	
-	//If getContact already exist in the specified list
-	 if ($contact = getContact($_POST["email"])) {
-		 $exists = false;
-		 foreach($contact["lists"] as $value) {
-			 if ($value["id"] == $_POST["list_id"]) {
-				 $exists = true;
-				 break;
-			 }
-		 }
-		 if ($exists) {
+	//If the contact already exist as one of the owner's contacts...
+	if ($contact = getContact($_POST["email"])) {
+
+		//compare each of the contact's lists to the list_id passed
+		$exists = false;
+		foreach($contact["lists"] as $value) {
+			if ($value["id"] == $_POST["list_id"]) {
+				$exists = true;
+				break;
+			}
+		}
+
+		//if the contact is already subscribed to a list
+		if ($exists) {
 			outputToModal("addmodal", "Epic Fail!", "This contact already exists in this list");
 			exit;
-		 } else {
-			 $result = addContactToList($contact, $_POST["list_id"]);
-			 if ($result == 200) {
+			
+		//contact exists but is not subscribed to the list
+		} else {
+			
+			//attempt to add to list
+			$result = addContactToList($contact, $_POST["list_id"]);
+
+			//check for success
+			if ($result == 200) {
 				outputToModal("addmodal", "Success!", "You have successfully added a contact");
-			 } else {
-				 outputToModal("addmodal", "Error!", "Something went wrong!");
-			 }
-			 exit;
-		 }
-	 
+			} else {
+				outputToModal("addmodal", "Error", "Something went wrong! (code: " . $result . ")");
+			}
+			exit;
+		}
 	}
+
+	//if we got here, the contact did not exist
+	
 	//If first name was never passed as a parameter
 	//This generally should not happen - form constraints should prevent it
 	if (!array_key_exists("first_name", $_POST)) {
@@ -39,7 +60,7 @@
 	} else if (!array_key_exists("email", $_POST)) {
 		outputToModal("addmodal", "Error!", "email must be provided");	
 
-	//else go ahead with the creation
+	//go ahead with the creation
 	} else {
 		
 		//first we build the array using the structure from the API documentation
