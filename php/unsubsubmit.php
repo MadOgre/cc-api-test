@@ -2,10 +2,8 @@
 	session_start();
 	require_once("config.php");
 	require_once("functions.php");
-	//outputToModal("unsubmodal", "", "Processing...");
 	$contact = $_SESSION["contact"];
 	$lists = $contact["lists"];
-	//var_dump($lists);
 	if (empty($_POST)) {
 		outputToModal("unsubmodal", "Nothing to do", "You have not selected any lists to unsubscribe from.");
 		exit;
@@ -13,17 +11,17 @@
 	$lists = array_values(array_filter($lists, function($listStruct){
 		return !in_array($listStruct["id"], $_POST);
 	}));
-	/*foreach ($_POST as $value) {
-		$lists[] = array("id" => $value);
-	}*/
-	//var_dump($lists);
 	$contact["lists"] = $lists;
-	$putUrl = buildUrl(contacts_base_url . '/' . $contact["id"]);
+	
+	//the "true" argument is necessary due to API behavior
+	//if no lists are supplied the action must be ACTION_BY_OWNER
+	//for this reason the GET-style url is used
+	$putUrl = buildUrl(contacts_base_url . '/' . $contact["id"], true);
+	
 	$response = httpRequest($putUrl, "PUT", getHeaders(), json_encode($contact));
-	echo '\n' . $response["info"]["http_code"];
-	var_dump($contact);
+	var_dump($response["info"]);
 	if ($response["info"]["http_code"] == 200) {
 		outputToModal("unsubmodal", "Success", "The contact list subscription was modified successfully");
 	} else {
-		outputToModal("unsubmodal", "Error", "Something went wrong.");
+		outputToModal("unsubmodal", "Error", "Something went wrong (code: " . $response["info"]["http_code"] . ")");
 	}
