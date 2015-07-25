@@ -6,14 +6,15 @@
 	$_SESSION["contact"] = $contact;
 	if (!empty($contact) && !empty($contact["lists"])) {
 		$lists = getAllContactLists();
-		$checkboxes = '';
+		$checkboxes = '<form id=\"listselect\" action=\"php/unsubsubmit.php\" ' .
+             			'target=\"addiframe\" method=\"post\">';
 		foreach ($contact["lists"] as $value) {
-			$checkboxes .= '<form id=\"listselect\" action=\"php/unsubsubmit.php\" ' .
-             			'target=\"addiframe\" method=\"post\"><div class=\"checkbox\">' .
+			$checkboxes .= '<div class=\"checkbox\">' .
 						'<label><input type=checkbox name=' .
 						$value["id"] . ' value=' . $value["id"] . '>' .
-						$lists[$value["id"]] . '</label></div></form>';
+						$lists[$value["id"]] . '</label></div>';
 		}
+		$checkboxes .= '</form>';
 		$modalHTML = 'Please check the lists you wish to be removed from and click \"Proceed\"<br><br>';
 		$modalHTML .= $checkboxes;
 		outputToModal("unsubmodal", "Unsubscribe...", $modalHTML, true);
